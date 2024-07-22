@@ -1,5 +1,11 @@
+import CookieConsent from '@/components/CookieConsent';
+
 function App() {
-  return <div>app</div>;
+  return (
+    <div>
+      <CookieConsent />
+    </div>
+  );
 }
 
 export default App;
