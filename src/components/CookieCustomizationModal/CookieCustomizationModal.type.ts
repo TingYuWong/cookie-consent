@@ -3,4 +3,5 @@ export interface PropsType {
   onClose: () => void;
   onAccept: () => void;
   onDecline: () => void;
+  onCloseConsent: () => void;
 }

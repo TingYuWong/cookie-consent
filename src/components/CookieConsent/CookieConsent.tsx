@@ -2,15 +2,30 @@ import { useState } from 'react';
 
 import Button from '@/components/prototypes/Button';
 import { BUTTON_COLOR_THEME } from '@/enum/ButtonColor.enum';
+import { COOKIE_CONSENT_TYPE } from '@/enum/CookieConsentType.enum';
 
 import CookieCustomizationModal from '../CookieCustomizationModal';
 import * as $ from './CookieConsent.styled';
+import { PropsType } from './CookieConsent.type';
 
-const CookieConsent = () => {
+const CookieConsent = ({ onCloseConsent }: PropsType) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const handleDecline = () => {};
-  const handleAccept = () => {};
+  const handleDecline = () => {
+    localStorage.setItem('cookie-allowed', JSON.stringify({ allowed: false }));
+    onCloseConsent();
+  };
+
+  const handleAccept = () => {
+    localStorage.setItem(
+      'cookie-allowed',
+      JSON.stringify({
+        allowed: true,
+        permission: [COOKIE_CONSENT_TYPE.ESSENTIALS, COOKIE_CONSENT_TYPE.ANALYTICS, COOKIE_CONSENT_TYPE.MARKETING],
+      }),
+    );
+    onCloseConsent();
+  };
 
   return (
     <>
@@ -44,6 +59,7 @@ const CookieConsent = () => {
         onClose={() => setIsOpenModal(false)}
         onAccept={handleAccept}
         onDecline={handleDecline}
+        onCloseConsent={onCloseConsent}
       />
     </>
   );

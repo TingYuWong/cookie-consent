@@ -3,26 +3,38 @@ import { useState } from 'react';
 import Button from '@/components/prototypes/Button';
 import Modal from '@/components/prototypes/Modal';
 import { BUTTON_COLOR_THEME } from '@/enum/ButtonColor.enum';
+import { COOKIE_CONSENT_TYPE } from '@/enum/CookieConsentType.enum';
 
 import * as $ from './CookieCustomizationModal.styled';
 import { PropsType } from './CookieCustomizationModal.type';
 
-const CookieCustomizationModal = ({ open, onClose, onAccept, onDecline }: PropsType) => {
+const CookieCustomizationModal = ({ open, onClose, onAccept, onDecline, onCloseConsent }: PropsType) => {
   const [isAnalytics, setIsAnalytics] = useState(false);
   const [isMarketing, setIsAMarketing] = useState(false);
 
   const handleAccept = () => {
     onAccept();
     onClose();
+    onCloseConsent();
   };
 
   const handleDecline = () => {
     onDecline();
     onClose();
+    onCloseConsent();
   };
 
   const handleSave = () => {
+    const permission: COOKIE_CONSENT_TYPE[] = [
+      { type: COOKIE_CONSENT_TYPE.ESSENTIALS, value: true },
+      { type: COOKIE_CONSENT_TYPE.ANALYTICS, value: isAnalytics },
+      { type: COOKIE_CONSENT_TYPE.MARKETING, value: isMarketing },
+    ]
+      .filter((item) => item.value)
+      .map((item) => item.type);
+    localStorage.setItem('cookie-allowed', JSON.stringify({ allowed: true, permission }));
     onClose();
+    onCloseConsent();
   };
 
   return (
